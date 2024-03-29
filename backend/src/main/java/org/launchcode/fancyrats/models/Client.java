@@ -15,12 +15,16 @@ public class Client {
 
     private String name;
     private String email;
+    private String zipCode;
+    private String address;
 
 
-    public Client(Long id, String name, String email) {
+    public Client(Long id, String name, String email, String zipCode, String address) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.zipCode = zipCode;
+        this.address = address;
     }
 
     public Client() {
@@ -45,5 +49,21 @@ public class Client {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
