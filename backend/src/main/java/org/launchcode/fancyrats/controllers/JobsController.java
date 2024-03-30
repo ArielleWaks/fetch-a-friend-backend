@@ -1,7 +1,6 @@
 package org.launchcode.fancyrats.controllers;
 
 import jakarta.validation.Valid;
-import org.launchcode.fancyrats.models.ERole;
 import org.launchcode.fancyrats.models.Job;
 import org.launchcode.fancyrats.models.User;
 import org.launchcode.fancyrats.models.data.JobRepository;
@@ -18,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -40,6 +41,21 @@ public class JobsController {
     @GetMapping
     public List<Job> getJobs() {
         return jobRepository.findAll();
+    }
+
+    @GetMapping("/myjobs")
+    public List<Job> getMyJobs(@AuthenticationPrincipal UserDetails userDetails) {
+        Optional<User> userResult = userRepository.findByUsername(userDetails.getUsername());
+        if(userResult.isPresent()) {
+            User user = userResult.get();
+            return jobRepository
+                    .findAll()
+                    .stream()
+                    .filter(job ->
+                            Objects.equals(job.getUser().getId(), user.getId()))
+                    .toList();
+        }
+        return Collections.emptyList();
     }
 
     @GetMapping("/{id}")
