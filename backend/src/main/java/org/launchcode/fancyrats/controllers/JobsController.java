@@ -1,6 +1,7 @@
 package org.launchcode.fancyrats.controllers;
 
 import jakarta.validation.Valid;
+import org.launchcode.fancyrats.models.ERole;
 import org.launchcode.fancyrats.models.Job;
 import org.launchcode.fancyrats.models.User;
 import org.launchcode.fancyrats.models.data.JobRepository;
@@ -56,7 +57,6 @@ public class JobsController {
             User user = userResult.get();
             job.setUser(user);
         }
-        //TODO: Validate job object before save
         job.setCreatedDate(LocalDate.now());
         Job savedJob = jobRepository.save(job);
         return ResponseEntity.created(new URI("/jobs/" + savedJob.getId())).body(savedJob);
@@ -72,7 +72,6 @@ public class JobsController {
         currentJob.setStartDate(job.getStartDate());
         currentJob.setEndDate(job.getEndDate());
         currentJob = jobRepository.save(currentJob);
-        //TODO: Validate currentJob object
         return ResponseEntity.ok(currentJob);
     }
 
