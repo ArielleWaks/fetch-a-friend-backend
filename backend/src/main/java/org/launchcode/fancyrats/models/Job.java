@@ -47,9 +47,12 @@ public class Job {
 
     //TODO: Add ManyToMany Pet field once Pet class is created;
 
-    //TODO: Reorder fields to match form response body
+    @ManyToOne
+    private User sitter;
 
-    public Job(Integer zipCode, LocalDate startDate, LocalDate endDate, LocalDate createdDate, double payRate, double totalHours, String description, User user) {
+    private JobStatus jobStatus;
+
+    public Job(Integer zipCode, LocalDate startDate, LocalDate endDate, LocalDate createdDate, double payRate, double totalHours, String description, User user, User sitter, JobStatus jobStatus) {
         this.zipCode = zipCode;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -58,6 +61,8 @@ public class Job {
         this.totalHours = totalHours;
         this.description = description;
         this.user = user;
+        this.sitter = sitter;
+        this.jobStatus = jobStatus;
     }
 
     public Job() {}
@@ -128,5 +133,21 @@ public class Job {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public User getSitter() {
+        return sitter;
+    }
+
+    public void setSitter(User sitter) {
+        this.sitter = sitter;
+    }
+
+    public JobStatus getJobStatus() {
+        return jobStatus;
+    }
+
+    public void setJobStatus(JobStatus jobStatus) {
+        this.jobStatus = jobStatus;
     }
 }

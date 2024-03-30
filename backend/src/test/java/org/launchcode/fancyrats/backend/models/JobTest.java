@@ -2,6 +2,7 @@ package org.launchcode.fancyrats.backend.models;
 
 import org.junit.jupiter.api.Test;
 import org.launchcode.fancyrats.models.Job;
+import org.launchcode.fancyrats.models.JobStatus;
 import org.launchcode.fancyrats.models.User;
 import org.launchcode.fancyrats.models.data.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,9 @@ public class JobTest {
                 LocalDate.of(2024, 3, 20),
                 LocalDate.now(), 18, 5,
                 "Job Test",
-                new User()
+                new User(),
+                new User(),
+                JobStatus.STATUS_OPEN
         );
         Job saveJob = jobRepository.save(job);
         assertThat(entityManager.find(Job.class, saveJob.getId()) ).isEqualTo(job);
@@ -49,7 +52,9 @@ public class JobTest {
                 LocalDate.of(2024, 3, 20),
                 LocalDate.now(), 18, 5,
                 "Job Test",
-                new User()
+                new User(),
+                new User(),
+                JobStatus.STATUS_OPEN
         );
         entityManager.persist(job);
         job.setDescription("Updated Job Test");
@@ -67,7 +72,9 @@ public class JobTest {
                 LocalDate.of(2024, 3, 20),
                 LocalDate.now(), 18, 5,
                 "Job Test",
-                new User()
+                new User(),
+                new User(),
+                JobStatus.STATUS_OPEN
         );
         entityManager.persist(job);
         jobRepository.delete(job);
@@ -82,7 +89,9 @@ public class JobTest {
                 LocalDate.of(2024, 3, 20),
                 LocalDate.now(), 18, 5,
                 "Job Test",
-                new User()
+                new User(),
+                new User(),
+                JobStatus.STATUS_OPEN
         );
         entityManager.persist(job);
         Optional<Job> retrivedJob = jobRepository.findById(job.getId());
