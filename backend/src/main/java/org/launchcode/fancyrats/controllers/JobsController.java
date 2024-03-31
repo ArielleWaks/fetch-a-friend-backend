@@ -43,6 +43,15 @@ public class JobsController {
         return jobRepository.findAll();
     }
 
+    @GetMapping("/open")
+    public List<Job> getOpenJobs() {
+        return jobRepository
+                .findAll()
+                .stream()
+                .filter(job -> Objects.equals(job.getJobStatus(), JobStatus.STATUS_OPEN))
+                .toList();
+    }
+
     @GetMapping("/myjobs")
     public List<Job> getMyJobs(@AuthenticationPrincipal UserDetails userDetails) {
         return jobRepository
