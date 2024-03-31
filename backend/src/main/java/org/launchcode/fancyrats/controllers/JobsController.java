@@ -2,6 +2,7 @@ package org.launchcode.fancyrats.controllers;
 
 import jakarta.validation.Valid;
 import org.launchcode.fancyrats.models.Job;
+import org.launchcode.fancyrats.models.JobStatus;
 import org.launchcode.fancyrats.models.User;
 import org.launchcode.fancyrats.models.data.JobRepository;
 import org.launchcode.fancyrats.models.data.UserRepository;
@@ -72,6 +73,8 @@ public class JobsController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
         job.setUser(user);
         job.setCreatedDate(LocalDate.now());
+        job.setJobStatus(JobStatus.STATUS_OPEN);
+        job.setSitter(null);
         Job savedJob = jobRepository.save(job);
         return ResponseEntity.created(new URI("/jobs/" + savedJob.getId())).body(savedJob);
     }
@@ -90,9 +93,29 @@ public class JobsController {
             currentJob.setTotalHours(job.getTotalHours());
             currentJob.setStartDate(job.getStartDate());
             currentJob.setEndDate(job.getEndDate());
-            //TODO: set sitter, set status
             currentJob = jobRepository.save(currentJob);
             return ResponseEntity.ok(currentJob);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
+    @PutMapping("/sitter/{id}")
+    public ResponseEntity<Job> assignSitter(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Integer id
+    ) {
+        Job currentJob = jobRepository.findById(id).orElseThrow(RuntimeException::new);
+        if (Objects.isNull(currentJob.getSitter()) || currentJob.getJobStatus() == JobStatus.STATUS_OPEN) {
+            if (Objects.equals(currentJob.getUser().getUsername(), userDetails.getUsername())) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            } else {
+                User user = userRepository.findByUsername(userDetails.getUsername())
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+                currentJob.setSitter(user);
+                currentJob.setJobStatus(JobStatus.STATUS_CLAIMED);
+                currentJob = jobRepository.save(currentJob);
+                return ResponseEntity.ok(currentJob);
+            }
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
