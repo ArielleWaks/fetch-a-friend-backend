@@ -13,14 +13,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/jobs")
@@ -28,7 +27,7 @@ public class JobsController {
 
     private final JobRepository jobRepository;
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public JobsController(
             JobRepository jobRepository,
@@ -45,22 +44,23 @@ public class JobsController {
 
     @GetMapping("/myjobs")
     public List<Job> getMyJobs(@AuthenticationPrincipal UserDetails userDetails) {
-        Optional<User> userResult = userRepository.findByUsername(userDetails.getUsername());
-        if(userResult.isPresent()) {
-            User user = userResult.get();
-            return jobRepository
-                    .findAll()
-                    .stream()
-                    .filter(job ->
-                            Objects.equals(job.getUser().getId(), user.getId()))
-                    .toList();
-        }
-        return Collections.emptyList();
+        return jobRepository
+                .findAll()
+                .stream()
+                .filter(job ->
+                        Objects.equals(job.getUser().getUsername(), userDetails.getUsername()))
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public Job getJob(@PathVariable Integer id) {
-        return jobRepository.findById(id).orElseThrow(RuntimeException::new);
+    public ResponseEntity<Job> getJob(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Integer id) {
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+        Job currentJob = jobRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+        if (Objects.equals(currentJob.getUser().getUsername(), userDetails.getUsername())) {
+            return ResponseEntity.ok(currentJob);
+        }
+       return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @PostMapping("/add")
@@ -68,33 +68,43 @@ public class JobsController {
             @AuthenticationPrincipal UserDetails userDetails,
             @Valid @RequestBody Job job
     ) throws URISyntaxException {
-        Optional<User> userResult = userRepository.findByUsername(userDetails.getUsername());
-        if(userResult.isPresent()) {
-            User user = userResult.get();
-            job.setUser(user);
-        }
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+        job.setUser(user);
         job.setCreatedDate(LocalDate.now());
         Job savedJob = jobRepository.save(job);
         return ResponseEntity.created(new URI("/jobs/" + savedJob.getId())).body(savedJob);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Job> updateJob(@PathVariable Integer id, @Valid @RequestBody Job job) {
+    public ResponseEntity<Job> updateJob(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Integer id,
+            @Valid @RequestBody Job job
+    ) {
         Job currentJob = jobRepository.findById(id).orElseThrow(RuntimeException::new);
-        currentJob.setDescription(job.getDescription());
-        currentJob.setZipCode(job.getZipCode());
-        currentJob.setPayRate(job.getPayRate());
-        currentJob.setTotalHours(job.getTotalHours());
-        currentJob.setStartDate(job.getStartDate());
-        currentJob.setEndDate(job.getEndDate());
-        currentJob = jobRepository.save(currentJob);
-        return ResponseEntity.ok(currentJob);
+        if (Objects.equals(currentJob.getUser().getUsername(), userDetails.getUsername())) {
+            currentJob.setDescription(job.getDescription());
+            currentJob.setZipCode(job.getZipCode());
+            currentJob.setPayRate(job.getPayRate());
+            currentJob.setTotalHours(job.getTotalHours());
+            currentJob.setStartDate(job.getStartDate());
+            currentJob.setEndDate(job.getEndDate());
+            //TODO: set sitter, set status
+            currentJob = jobRepository.save(currentJob);
+            return ResponseEntity.ok(currentJob);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Job> deleteJob(@PathVariable Integer id) {
-        jobRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Job> deleteJob(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Integer id) {
+        Job currentJob = jobRepository.findById(id).orElseThrow(RuntimeException::new);
+        if (Objects.equals(currentJob.getUser().getUsername(), userDetails.getUsername())) {
+            jobRepository.deleteById(id);
+            return ResponseEntity.ok().build();
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
