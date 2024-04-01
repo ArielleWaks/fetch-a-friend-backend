@@ -62,6 +62,16 @@ public class JobsController {
                 .toList();
     }
 
+    @GetMapping("/mysitting")
+    public List<Job> getMyJobsSitting(@AuthenticationPrincipal UserDetails userDetails) {
+        return jobRepository
+                .findAll()
+                .stream()
+                .filter(job ->
+                        job.getSitter() != null && Objects.equals(job.getSitter().getUsername(), userDetails.getUsername()))
+                .toList();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Job> getJob(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Integer id) {
         User user = userRepository.findByUsername(userDetails.getUsername())
