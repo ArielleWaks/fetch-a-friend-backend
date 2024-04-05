@@ -112,6 +112,9 @@ public class JobsController {
             currentJob.setTotalHours(job.getTotalHours());
             currentJob.setStartDate(job.getStartDate());
             currentJob.setEndDate(job.getEndDate());
+            currentJob.setPetName(job.getPetName());
+            currentJob.setPetType(job.getPetType());
+            currentJob.setPetNumber(job.getPetNumber());
             currentJob = jobRepository.save(currentJob);
             return ResponseEntity.ok(currentJob);
         }

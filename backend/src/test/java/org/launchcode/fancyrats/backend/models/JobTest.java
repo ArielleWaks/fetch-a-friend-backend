@@ -8,7 +8,6 @@ import org.launchcode.fancyrats.models.data.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
@@ -36,7 +35,7 @@ public class JobTest {
                 LocalDate.of(2024, 3, 20),
                 LocalDate.now(), 18, 5,
                 "Job Test",
-                new User(),
+                petName, petType, petNumber, new User(),
                 new User(),
                 JobStatus.STATUS_OPEN
         );
@@ -52,7 +51,7 @@ public class JobTest {
                 LocalDate.of(2024, 3, 20),
                 LocalDate.now(), 18, 5,
                 "Job Test",
-                new User(),
+                petName, petType, petNumber, new User(),
                 new User(),
                 JobStatus.STATUS_OPEN
         );
@@ -72,7 +71,7 @@ public class JobTest {
                 LocalDate.of(2024, 3, 20),
                 LocalDate.now(), 18, 5,
                 "Job Test",
-                new User(),
+                petName, petType, petNumber, new User(),
                 new User(),
                 JobStatus.STATUS_OPEN
         );
@@ -89,7 +88,7 @@ public class JobTest {
                 LocalDate.of(2024, 3, 20),
                 LocalDate.now(), 18, 5,
                 "Job Test",
-                new User(),
+                petName, petType, petNumber, new User(),
                 new User(),
                 JobStatus.STATUS_OPEN
         );
