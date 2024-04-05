@@ -42,6 +42,26 @@ public class Job {
     @NotNull(message = "Description required")
     private String description;
 
+    public static enum animalType{
+        DOG("Dog"),
+        CAT("Cat"),
+        BIRD("Bird"),
+        FISH("FiSH"),
+        HAMSTER("Hamster"),
+        GERBIL("Gerbil"),
+        LIZARD("Lizard");
+
+        private final String displayName;
+        private animalType(String displayName){
+            this.displayName = displayName;
+        }
+
+        public String getDisplayName(){return this.displayName;}
+    }
+
+    @NotNull
+    private String chosenAnimalType;
+
     @ManyToOne
     private User user;
 
@@ -52,7 +72,8 @@ public class Job {
 
     private JobStatus jobStatus;
 
-    public Job(Integer zipCode, LocalDate startDate, LocalDate endDate, LocalDate createdDate, double payRate, double totalHours, String description, User user, User sitter, JobStatus jobStatus) {
+    public Job(Integer zipCode, LocalDate startDate, LocalDate endDate, LocalDate createdDate, double payRate,
+               double totalHours, String description, User user, User sitter, JobStatus jobStatus, String chosenAnimalType) {
         this.zipCode = zipCode;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -63,6 +84,7 @@ public class Job {
         this.user = user;
         this.sitter = sitter;
         this.jobStatus = jobStatus;
+        this.chosenAnimalType = chosenAnimalType;
     }
 
     public Job() {}
@@ -150,4 +172,8 @@ public class Job {
     public void setJobStatus(JobStatus jobStatus) {
         this.jobStatus = jobStatus;
     }
+
+    public String getChosenAnimalType(){return this.chosenAnimalType;}
+
+    public void setChosenAnimalType(String newChosenAnimal){this.chosenAnimalType = newChosenAnimal;}
 }
