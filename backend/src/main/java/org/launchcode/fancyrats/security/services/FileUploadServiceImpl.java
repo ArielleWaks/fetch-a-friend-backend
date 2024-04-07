@@ -42,7 +42,7 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     @Override
     public FileUploadResponse uploadFile(MultipartFile file,
-                                         String uploaderName) throws IOException {
+                                         String uploaderName, String description) throws IOException {
         if (!Files.exists(UPLOAD_PATH)) {
             Files.createDirectories(UPLOAD_PATH);
         }
@@ -67,7 +67,7 @@ public class FileUploadServiceImpl implements FileUploadService {
 
         FileDetails fileDetails = new FileDetails(file.getOriginalFilename(),
                 fileUri,
-                fileDownloadUri, file.getSize(), uploaderName);
+                fileDownloadUri, file.getSize(), uploaderName, description );
 
         this.fileDetailsRepository.save(fileDetails);
 
@@ -75,7 +75,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                 new FileUploadResponse(fileDetails.getId(),
                         file.getOriginalFilename(), fileUri, fileDownloadUri,
                         file.getSize(),
-                        uploaderName);
+                        uploaderName, description);
 
         return fileUploadResponse;
     }

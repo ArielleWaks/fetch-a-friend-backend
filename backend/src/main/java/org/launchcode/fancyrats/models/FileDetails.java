@@ -26,15 +26,18 @@ public class FileDetails {
     private long fileSize;
     @Column
     private String uploaderName;
+    @Column
+    private String description;
 
     public FileDetails(String fileName, String fileUri,
                        String fileDownloadUri, long fileSize,
-                       String uploaderName) {
+                       String uploaderName, String description) {
 
         this.fileName = fileName;
         this.fileUri = fileUri;
         this.fileDownloadUri = fileDownloadUri;
         this.fileSize = fileSize;
         this.uploaderName = uploaderName;
+        this.description = description;
     }
 }
