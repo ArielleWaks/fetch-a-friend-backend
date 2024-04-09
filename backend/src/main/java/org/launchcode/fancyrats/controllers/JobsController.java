@@ -90,6 +90,7 @@ public class JobsController {
             currentJob.setTotalHours(job.getTotalHours());
             currentJob.setStartDate(job.getStartDate());
             currentJob.setEndDate(job.getEndDate());
+            currentJob.setChosenAnimalType(job.getChosenAnimalType());
             //TODO: set sitter, set status
             currentJob = jobRepository.save(currentJob);
             return ResponseEntity.ok(currentJob);

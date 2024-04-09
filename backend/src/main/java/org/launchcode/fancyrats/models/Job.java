@@ -46,7 +46,7 @@ public class Job {
         DOG("Dog"),
         CAT("Cat"),
         BIRD("Bird"),
-        FISH("FiSH"),
+        FISH("Fish"),
         HAMSTER("Hamster"),
         GERBIL("Gerbil"),
         LIZARD("Lizard");
