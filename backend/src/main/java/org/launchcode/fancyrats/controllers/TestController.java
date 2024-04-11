@@ -39,10 +39,18 @@ public class TestController {
         return "Moderator Board.";
     }
 
+    @GetMapping("/profile")
+    @PreAuthorize("hasRole('MODERATOR')")
+    public String profileAccess() {
+        return "";
+    }
+
     @GetMapping("/admin")
     @PreAuthorize("hasRole('ADMIN')")
     public List<Job> adminAccess() {
         return jobRepository.findAll();
 //        return "Admin Board.";
     }
+
+
 }
