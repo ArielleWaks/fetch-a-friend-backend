@@ -2,13 +2,10 @@ package org.launchcode.fancyrats.models;
 
 import jakarta.transaction.Transactional;
 import org.launchcode.fancyrats.models.data.JobRepository;
-import org.launchcode.fancyrats.models.data.UserRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
 
 @Service
 public class JobScheduler {
@@ -19,7 +16,7 @@ public class JobScheduler {
         this.jobRepository = jobRepository;
     }
 
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 600000) //600000=6 minutes
     @Transactional
     public void updateExpiredAndCompletedJobs() {
         jobRepository.closeExpiredJobs(LocalDate.now());
