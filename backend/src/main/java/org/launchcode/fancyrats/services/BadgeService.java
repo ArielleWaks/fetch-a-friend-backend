@@ -22,13 +22,52 @@ public class BadgeService {
         if(completedSitterJobs == 0) {
             return null;
         }
-        if(completedSitterJobs == 1) {
+        if(completedSitterJobs >= 1 && completedSitterJobs < 5) {
             return badgeRepository.getReferenceById(1);
         }
-        if(completedSitterJobs > 1 && completedSitterJobs <= 5) {
+        if(completedSitterJobs >= 5 && completedSitterJobs < 10) {
             return badgeRepository.getReferenceById(2);
         }
-        return badgeRepository.getReferenceById(3);
+        if(completedSitterJobs >= 10 && completedSitterJobs <25 ) {
+            return badgeRepository.getReferenceById(3);
+        }
+        return badgeRepository.getReferenceById(4);
+    }
+
+//    public Badge checkDifferentSpeciesBadge(String username) {
+//
+//    }
+
+    public Badge checkCompletedDogBadge(String username) {
+        int completedDogJobs = jobRepository.findJobsBySitterAndPetType(username, 0).size();
+        if(completedDogJobs >=3) {
+            return badgeRepository.getReferenceById(31);
+        }
+        return null;
+    }
+
+    public Badge checkCompletedCatBadge(String username) {
+        int completedCatJobs = jobRepository.findJobsBySitterAndPetType(username, 1).size();
+        if(completedCatJobs >=3) {
+            return badgeRepository.getReferenceById(32);
+        }
+        return null;
+    }
+
+    public Badge checkCompletedFishBadge(String username) {
+        int completedFishJobs = jobRepository.findJobsBySitterAndPetType(username, 2).size();
+        if(completedFishJobs >=3) {
+            return badgeRepository.getReferenceById(33);
+        }
+        return null;
+    }
+
+    public Badge checkCompletedBirdBadge(String username) {
+        int completedBirdJobs = jobRepository.findJobsBySitterAndPetType(username, 3).size();
+        if(completedBirdJobs >=3) {
+            return badgeRepository.getReferenceById(34);
+        }
+        return null;
     }
 
 }
