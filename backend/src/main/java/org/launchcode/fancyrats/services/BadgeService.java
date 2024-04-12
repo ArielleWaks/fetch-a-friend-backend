@@ -1,6 +1,7 @@
 package org.launchcode.fancyrats.services;
 
 import org.launchcode.fancyrats.models.Badge;
+import org.launchcode.fancyrats.models.PetType;
 import org.launchcode.fancyrats.models.data.BadgeRepository;
 import org.launchcode.fancyrats.models.data.JobRepository;
 import org.launchcode.fancyrats.models.data.UserRepository;
@@ -34,9 +35,21 @@ public class BadgeService {
         return badgeRepository.getReferenceById(4);
     }
 
-//    public Badge checkDifferentSpeciesBadge(String username) {
-//
-//    }
+    public Badge checkDifferentSpeciesBadge(String username) {
+        int petTypeCount = 0;
+        for (int i=0; i< PetType.values().length; i++) {
+            if(jobRepository.findJobsBySitterAndPetType(username, i).size() >= 1) {
+                petTypeCount +=1;
+            }
+        }
+        if (petTypeCount >= 5) {
+            return badgeRepository.getReferenceById(22);
+        }
+        if (petTypeCount >= 3) {
+            return badgeRepository.getReferenceById(21);
+        }
+        return null;
+    }
 
     public Badge checkCompletedDogBadge(String username) {
         int completedDogJobs = jobRepository.findJobsBySitterAndPetType(username, 0).size();
