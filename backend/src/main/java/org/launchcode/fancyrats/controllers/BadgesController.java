@@ -34,10 +34,10 @@ public class BadgesController {
         return badgeRepository.findAll();
     }
 
-    @GetMapping("/mybadges")
-    public List<Badge> getSitterBadges(@AuthenticationPrincipal UserDetails userDetails) {
-
-    }
+//    @GetMapping("/mybadges")
+//    public List<Badge> getSitterBadges(@AuthenticationPrincipal UserDetails userDetails) {
+//
+//    }
 
 
 
