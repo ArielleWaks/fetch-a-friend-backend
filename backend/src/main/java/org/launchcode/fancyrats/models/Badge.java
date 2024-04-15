@@ -11,6 +11,8 @@ public class Badge {
     @GeneratedValue
     private Integer id;
 
+
+
     private String name;
 
     private String description;

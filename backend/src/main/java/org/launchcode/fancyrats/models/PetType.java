@@ -14,5 +14,4 @@ public enum PetType {
     FERRET,
     MOUSE,
     CHINCHILLA
-
 }

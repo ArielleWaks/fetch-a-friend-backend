@@ -55,23 +55,11 @@ public class JobsController {
     @GetMapping("/myjobs")
     public List<Job> getMyJobs(@AuthenticationPrincipal UserDetails userDetails) {
         return jobRepository.findJobsByUserUsername(userDetails.getUsername());
-//        return jobRepository
-//                .findAll()
-//                .stream()
-//                .filter(job ->
-//                        Objects.equals(job.getUser().getUsername(), userDetails.getUsername()))
-//                .toList();
     }
 
     @GetMapping("/mysitting")
     public List<Job> getMyJobsSitting(@AuthenticationPrincipal UserDetails userDetails) {
         return jobRepository.findJobsBySitterUsername(userDetails.getUsername());
-//        return jobRepository
-//                .findAll()
-//                .stream()
-//                .filter(job ->
-//                        job.getSitter() != null && Objects.equals(job.getSitter().getUsername(), userDetails.getUsername()))
-//                .toList();
     }
 
     @GetMapping("/{id}")

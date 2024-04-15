@@ -4,32 +4,32 @@ import org.launchcode.fancyrats.models.Badge;
 import org.launchcode.fancyrats.models.PetType;
 import org.launchcode.fancyrats.models.data.BadgeRepository;
 import org.launchcode.fancyrats.models.data.JobRepository;
-import org.launchcode.fancyrats.models.data.UserRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class BadgeService {
 
-    private JobRepository jobRepository;
+    private final JobRepository jobRepository;
 
-    private UserRepository userRepository;
+    private final BadgeRepository badgeRepository;
 
-    private BadgeRepository badgeRepository;
+    public BadgeService(JobRepository jobRepository, BadgeRepository badgeRepository) {
+        this.jobRepository = jobRepository;
+        this.badgeRepository = badgeRepository;
+    }
 
     public Badge checkCompletedJobsBadge(String username) {
         int completedSitterJobs = jobRepository.findCompletedJobsBySitterUsername(username).size();
         if(completedSitterJobs == 0) {
             return null;
         }
-        if(completedSitterJobs >= 1 && completedSitterJobs < 5) {
+        if(completedSitterJobs < 5) {
             return badgeRepository.getReferenceById(1);
         }
-        if(completedSitterJobs >= 5 && completedSitterJobs < 10) {
+        if(completedSitterJobs < 10) {
             return badgeRepository.getReferenceById(2);
         }
-        if(completedSitterJobs >= 10 && completedSitterJobs <25 ) {
+        if(completedSitterJobs <25) {
             return badgeRepository.getReferenceById(3);
         }
         return badgeRepository.getReferenceById(4);
@@ -38,7 +38,7 @@ public class BadgeService {
     public Badge checkDifferentSpeciesBadge(String username) {
         int petTypeCount = 0;
         for (int i=0; i< PetType.values().length; i++) {
-            if(jobRepository.findJobsBySitterAndPetType(username, i).size() >= 1) {
+            if(!jobRepository.findJobsBySitterAndPetType(username, i).isEmpty()) {
                 petTypeCount +=1;
             }
         }
@@ -51,36 +51,28 @@ public class BadgeService {
         return null;
     }
 
-    public Badge checkCompletedDogBadge(String username) {
-        int completedDogJobs = jobRepository.findJobsBySitterAndPetType(username, 0).size();
+    public Badge checkCompletedAnamalBadge(String username, PetType petType) {
+        int completedDogJobs = jobRepository.findJobsBySitterAndPetType(username, petType.ordinal()).size();
         if(completedDogJobs >=3) {
             return badgeRepository.getReferenceById(31);
         }
         return null;
     }
 
+    public Badge checkCompletedDogBadge(String username) {
+        return checkCompletedAnamalBadge(username, PetType.DOG);
+    }
+
     public Badge checkCompletedCatBadge(String username) {
-        int completedCatJobs = jobRepository.findJobsBySitterAndPetType(username, 1).size();
-        if(completedCatJobs >=3) {
-            return badgeRepository.getReferenceById(32);
-        }
-        return null;
+        return checkCompletedAnamalBadge(username, PetType.CAT);
     }
 
     public Badge checkCompletedFishBadge(String username) {
-        int completedFishJobs = jobRepository.findJobsBySitterAndPetType(username, 2).size();
-        if(completedFishJobs >=3) {
-            return badgeRepository.getReferenceById(33);
-        }
-        return null;
+        return checkCompletedAnamalBadge(username, PetType.FISH);
     }
 
     public Badge checkCompletedBirdBadge(String username) {
-        int completedBirdJobs = jobRepository.findJobsBySitterAndPetType(username, 3).size();
-        if(completedBirdJobs >=3) {
-            return badgeRepository.getReferenceById(34);
-        }
-        return null;
+        return checkCompletedAnamalBadge(username, PetType.BIRD);
     }
 
 }

@@ -34,4 +34,6 @@ public interface JobRepository extends JpaRepository<Job, Integer> {
     @Query("select j from Job j, User u where j.sitter = u and j.jobStatus = 3 and u.username = :sitterUsername and j.petType = :petType")
     List<Job> findJobsBySitterAndPetType(@Param("sitterUsername") String sitterUsername, @Param("petType") int petType);
 
+
+
 }
