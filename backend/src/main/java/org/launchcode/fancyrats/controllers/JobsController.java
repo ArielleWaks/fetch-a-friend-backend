@@ -105,6 +105,7 @@ public class JobsController {
             currentJob.setPetName(job.getPetName());
             currentJob.setPetType(job.getPetType());
             currentJob.setPetNumber(job.getPetNumber());
+            currentJob.setChosenAnimalType(job.getChosenAnimalType());
             currentJob = jobRepository.save(currentJob);
             return ResponseEntity.ok(currentJob);
         }
