@@ -16,7 +16,7 @@ public class JobScheduler {
         this.jobRepository = jobRepository;
     }
 
-    @Scheduled(fixedDelay = 600000) //600000=6 minutes
+    @Scheduled(fixedDelay = 6000000) //6000000=60 minutes
     @Transactional
     public void updateExpiredAndCompletedJobs() {
         jobRepository.closeExpiredJobs(LocalDate.now());
