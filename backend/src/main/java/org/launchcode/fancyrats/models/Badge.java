@@ -1,8 +1,6 @@
 package org.launchcode.fancyrats.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Badge {
@@ -11,7 +9,7 @@ public class Badge {
     @GeneratedValue
     private Integer id;
 
-
+    private BadgeType badgeType;
 
     private String name;
 
@@ -19,7 +17,8 @@ public class Badge {
 
     private String message;
 
-    public Badge(String name, String description, String message) {
+    public Badge(BadgeType badgeType, String name, String description, String message) {
+        this.badgeType = badgeType;
         this.name = name;
         this.description = description;
         this.message = message;
@@ -30,6 +29,14 @@ public class Badge {
 
     public Integer getId() {
         return id;
+    }
+
+    public BadgeType getBadgeType() {
+        return badgeType;
+    }
+
+    public void setBadgeType(BadgeType badgeType) {
+        this.badgeType = badgeType;
     }
 
     public String getName() {

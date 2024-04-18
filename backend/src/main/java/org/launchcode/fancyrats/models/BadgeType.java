@@ -5,6 +5,8 @@ public enum BadgeType {
     JOB,
     RETURN,
     SPECIES,
+    SPECIALTY;
 
-
+    BadgeType() {
+    }
 }
