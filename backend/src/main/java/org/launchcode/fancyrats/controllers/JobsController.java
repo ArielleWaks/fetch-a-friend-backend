@@ -54,22 +54,12 @@ public class JobsController {
 
     @GetMapping("/myjobs")
     public List<Job> getMyJobs(@AuthenticationPrincipal UserDetails userDetails) {
-        return jobRepository
-                .findAll()
-                .stream()
-                .filter(job ->
-                        Objects.equals(job.getUser().getUsername(), userDetails.getUsername()))
-                .toList();
+        return jobRepository.findJobsByUserUsername(userDetails.getUsername());
     }
 
     @GetMapping("/mysitting")
     public List<Job> getMyJobsSitting(@AuthenticationPrincipal UserDetails userDetails) {
-        return jobRepository
-                .findAll()
-                .stream()
-                .filter(job ->
-                        job.getSitter() != null && Objects.equals(job.getSitter().getUsername(), userDetails.getUsername()))
-                .toList();
+        return jobRepository.findJobsBySitterUsername(userDetails.getUsername());
     }
 
     @GetMapping("/{id}")
@@ -112,8 +102,10 @@ public class JobsController {
             currentJob.setTotalHours(job.getTotalHours());
             currentJob.setStartDate(job.getStartDate());
             currentJob.setEndDate(job.getEndDate());
+            currentJob.setPetName(job.getPetName());
+            currentJob.setPetType(job.getPetType());
+            currentJob.setPetNumber(job.getPetNumber());
             currentJob.setChosenAnimalType(job.getChosenAnimalType());
-            //TODO: set sitter, set status
             currentJob = jobRepository.save(currentJob);
             return ResponseEntity.ok(currentJob);
         }

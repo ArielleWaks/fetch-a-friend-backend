@@ -42,6 +42,12 @@ public class Job {
     @NotNull(message = "Description required")
     private String description;
 
+    private String petName;
+
+    private PetType petType;
+
+    private Integer petNumber;
+
     public static enum animalType{
         DOG("Dog"),
         CAT("Cat"),
@@ -65,7 +71,6 @@ public class Job {
     @ManyToOne
     private User user;
 
-    //TODO: Add ManyToMany Pet field once Pet class is created;
 
     @ManyToOne
     private User sitter;
@@ -73,7 +78,7 @@ public class Job {
     private JobStatus jobStatus;
 
     public Job(Integer zipCode, LocalDate startDate, LocalDate endDate, LocalDate createdDate, double payRate,
-               double totalHours, String description, User user, User sitter, JobStatus jobStatus, String chosenAnimalType) {
+               double totalHours, String description, String petName, PetType petType, Integer petNumber, User user, User sitter, JobStatus jobStatus, String chosenAnimalType) {
         this.zipCode = zipCode;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -81,6 +86,9 @@ public class Job {
         this.payRate = payRate;
         this.totalHours = totalHours;
         this.description = description;
+        this.petName = petName;
+        this.petType = petType;
+        this.petNumber = petNumber;
         this.user = user;
         this.sitter = sitter;
         this.jobStatus = jobStatus;
@@ -147,6 +155,30 @@ public class Job {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getPetName() {
+        return petName;
+    }
+
+    public void setPetName(String petName) {
+        this.petName = petName;
+    }
+
+    public PetType getPetType() {
+        return petType;
+    }
+
+    public void setPetType(PetType petType) {
+        this.petType = petType;
+    }
+
+    public Integer getPetNumber() {
+        return petNumber;
+    }
+
+    public void setPetNumber(Integer petNumber) {
+        this.petNumber = petNumber;
     }
 
     public User getUser() {
