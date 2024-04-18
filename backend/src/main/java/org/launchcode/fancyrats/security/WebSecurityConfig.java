@@ -94,6 +94,11 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
                                 .requestMatchers("/api/jobs/open").permitAll()
                                 .requestMatchers("/file/**").permitAll()
                                 .requestMatchers("/image/**").permitAll()
+
+                                .requestMatchers("/clients").permitAll()
+                                .requestMatchers("/clients/search/").permitAll()
+                                .requestMatchers("/clients/{id}").permitAll()
+                                .requestMatchers("/ws/**").permitAll()
                                 .anyRequest().authenticated()
                 );
 
