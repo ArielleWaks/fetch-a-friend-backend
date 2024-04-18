@@ -1,5 +1,6 @@
 package org.launchcode.fancyrats.models;
 
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -7,15 +8,20 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Entity
+@Table(name = "messages")
 public class Message {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column
     private String senderName;
-
-    private String recieverName;
-
-    private String content;
-
-    private String timestamp;
-
+    @Column
+    private String receiverName;
+    @Column
+    private String message;
+    @Column
+    private String date;
+    @Enumerated(EnumType.STRING)
     private Status status;
 }
