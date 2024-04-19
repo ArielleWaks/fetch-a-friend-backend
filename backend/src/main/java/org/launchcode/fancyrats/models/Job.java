@@ -203,4 +203,6 @@ public class Job {
     }
 
     public void addUserWhoBookmarked(User user){ this.usersWhoBookmarked.add(user);}
+
+    public void removeUserWhoBookmarked (User user){ this.getUsersWhoBookmarked().remove(user);}
 }
