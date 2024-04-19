@@ -1,12 +1,11 @@
 package org.launchcode.fancyrats.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Job {
@@ -48,23 +47,6 @@ public class Job {
 
     private Integer petNumber;
 
-    public static enum animalType{
-        DOG("Dog"),
-        CAT("Cat"),
-        BIRD("Bird"),
-        FISH("Fish"),
-        HAMSTER("Hamster"),
-        GERBIL("Gerbil"),
-        LIZARD("Lizard");
-
-        private final String displayName;
-        private animalType(String displayName){
-            this.displayName = displayName;
-        }
-
-        public String getDisplayName(){return this.displayName;}
-    }
-
     @NotNull
     private String chosenAnimalType;
 
@@ -76,6 +58,13 @@ public class Job {
     private User sitter;
 
     private JobStatus jobStatus;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "job_user_bookmark",
+            joinColumns = @JoinColumn(name = "job_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> usersWhoBookmarked = new ArrayList<>();
 
     public Job(Integer zipCode, LocalDate startDate, LocalDate endDate, LocalDate createdDate, double payRate,
                double totalHours, String description, String petName, PetType petType, Integer petNumber, User user, User sitter, JobStatus jobStatus, String chosenAnimalType) {
@@ -208,4 +197,10 @@ public class Job {
     public String getChosenAnimalType(){return this.chosenAnimalType;}
 
     public void setChosenAnimalType(String newChosenAnimal){this.chosenAnimalType = newChosenAnimal;}
+
+    public List<User> getUsersWhoBookmarked() {
+        return usersWhoBookmarked;
+    }
+
+    public void addUserWhoBookmarked(User user){ this.usersWhoBookmarked.add(user);}
 }
