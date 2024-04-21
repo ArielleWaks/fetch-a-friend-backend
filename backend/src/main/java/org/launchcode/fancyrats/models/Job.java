@@ -48,23 +48,6 @@ public class Job {
 
     private Integer petNumber;
 
-    public static enum animalType{
-        DOG("Dog"),
-        CAT("Cat"),
-        BIRD("Bird"),
-        FISH("Fish"),
-        HAMSTER("Hamster"),
-        GERBIL("Gerbil"),
-        LIZARD("Lizard");
-
-        private final String displayName;
-        private animalType(String displayName){
-            this.displayName = displayName;
-        }
-
-        public String getDisplayName(){return this.displayName;}
-    }
-
     @NotNull
     private String chosenAnimalType;
 

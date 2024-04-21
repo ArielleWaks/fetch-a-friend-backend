@@ -13,15 +13,18 @@ public class Badge {
 
     private Integer numberOfJobs;
 
+    private PetType petType;
+
     private String name;
 
     private String description;
 
     private String message;
 
-    public Badge(BadgeType badgeType, Integer numberOfJobs, String name, String description, String message) {
+    public Badge(BadgeType badgeType, Integer numberOfJobs, PetType petType, String name, String description, String message) {
         this.badgeType = badgeType;
         this.numberOfJobs = numberOfJobs;
+        this.petType = petType;
         this.name = name;
         this.description = description;
         this.message = message;
@@ -48,6 +51,14 @@ public class Badge {
 
     public void setNumberOfJobs(Integer numberOfJobs) {
         this.numberOfJobs = numberOfJobs;
+    }
+
+    public PetType getPetType() {
+        return petType;
+    }
+
+    public void setPetType(PetType petType) {
+        this.petType = petType;
     }
 
     public String getName() {

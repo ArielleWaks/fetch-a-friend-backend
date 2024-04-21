@@ -1,10 +1,15 @@
 package org.launchcode.fancyrats.services;
 
 import org.launchcode.fancyrats.models.Badge;
+import org.launchcode.fancyrats.models.BadgeType;
 import org.launchcode.fancyrats.models.PetType;
+import org.launchcode.fancyrats.models.User;
 import org.launchcode.fancyrats.models.data.BadgeRepository;
 import org.launchcode.fancyrats.models.data.JobRepository;
+import org.launchcode.fancyrats.models.data.UserRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class BadgeService {
@@ -13,18 +18,46 @@ public class BadgeService {
 
     private final BadgeRepository badgeRepository;
 
-    public BadgeService(JobRepository jobRepository, BadgeRepository badgeRepository) {
+    private final UserRepository userRepository;
+
+    public BadgeService(JobRepository jobRepository, BadgeRepository badgeRepository, UserRepository userRepository) {
         this.jobRepository = jobRepository;
         this.badgeRepository = badgeRepository;
+        this.userRepository = userRepository;
     }
 
-    public Badge checkCompletedJobsBadge(String username) {
+    private Badge findJobNumberBadgeBySitterId(Long sitterId){
+        int completedSitterJobs = jobRepository.countCompletedJobBySitterId(sitterId);
+        if(completedSitterJobs == 0) {
+            return null;
+        }
+        if(completedSitterJobs < 5) {
+            return badgeRepository.findBadgeByBadgeTypeAndNumberOfJobs(BadgeType.JOB, 1);
+        }
+        if(completedSitterJobs < 10) {
+            return badgeRepository.findBadgeByBadgeTypeAndNumberOfJobs(BadgeType.JOB, 5);
+        }
+        if(completedSitterJobs <25) {
+            return badgeRepository.findBadgeByBadgeTypeAndNumberOfJobs(BadgeType.JOB, 10);
+        }
+        return badgeRepository.findBadgeByBadgeTypeAndNumberOfJobs(BadgeType.JOB, 25);
+    }
+
+    public void assignJobNumberBadgeToSitter(User sitter){
+        List<Badge> currentBadges = sitter.getBadges();
+        if (currentBadges.contains(findJobNumberBadgeBySitterId(sitter.getId()))) {
+            return;
+        }
+        currentBadges.add(findJobNumberBadgeBySitterId(sitter.getId()));
+    }
+
+    public Badge findCompletedJobsBadge(String username) {
         int completedSitterJobs = jobRepository.findCompletedJobsBySitterUsername(username).size();
         if(completedSitterJobs == 0) {
             return null;
         }
         if(completedSitterJobs < 5) {
-            return badgeRepository.getReferenceById(1);
+            return badgeRepository.findBadgeByBadgeTypeAndNumberOfJobs(BadgeType.JOB, 1);
         }
         if(completedSitterJobs < 10) {
             return badgeRepository.getReferenceById(2);
@@ -35,7 +68,7 @@ public class BadgeService {
         return badgeRepository.getReferenceById(4);
     }
 
-    public Badge checkDifferentSpeciesBadge(String username) {
+    public Badge findDifferentSpeciesBadge(String username) {
         int petTypeCount = 0;
         for (int i=0; i< PetType.values().length; i++) {
             if(!jobRepository.findJobsBySitterAndPetType(username, i).isEmpty()) {
@@ -51,7 +84,7 @@ public class BadgeService {
         return null;
     }
 
-    public Badge checkCompletedAnamalBadge(String username, PetType petType) {
+    public Badge findCompletedAnamalBadge(String username, PetType petType) {
         int completedDogJobs = jobRepository.findJobsBySitterAndPetType(username, petType.ordinal()).size();
         if(completedDogJobs >=3) {
             return badgeRepository.getReferenceById(31);
@@ -59,20 +92,20 @@ public class BadgeService {
         return null;
     }
 
-    public Badge checkCompletedDogBadge(String username) {
-        return checkCompletedAnamalBadge(username, PetType.DOG);
+    public Badge findCompletedDogBadge(String username) {
+        return findCompletedAnamalBadge(username, PetType.DOG);
     }
 
-    public Badge checkCompletedCatBadge(String username) {
-        return checkCompletedAnamalBadge(username, PetType.CAT);
+    public Badge findCompletedCatBadge(String username) {
+        return findCompletedAnamalBadge(username, PetType.CAT);
     }
 
-    public Badge checkCompletedFishBadge(String username) {
-        return checkCompletedAnamalBadge(username, PetType.FISH);
+    public Badge findCompletedFishBadge(String username) {
+        return findCompletedAnamalBadge(username, PetType.FISH);
     }
 
-    public Badge checkCompletedBirdBadge(String username) {
-        return checkCompletedAnamalBadge(username, PetType.BIRD);
+    public Badge findCompletedBirdBadge(String username) {
+        return findCompletedAnamalBadge(username, PetType.BIRD);
     }
 
 }
