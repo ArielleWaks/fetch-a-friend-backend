@@ -1,15 +1,18 @@
 package org.launchcode.fancyrats.controllers;
 
 import org.launchcode.fancyrats.models.Badge;
+import org.launchcode.fancyrats.models.User;
 import org.launchcode.fancyrats.models.data.BadgeRepository;
 import org.launchcode.fancyrats.models.data.JobRepository;
 import org.launchcode.fancyrats.models.data.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -34,10 +37,12 @@ public class BadgesController {
         return badgeRepository.findAll();
     }
 
-//    @GetMapping("/mybadges")
-//    public List<Badge> getSitterBadges(@AuthenticationPrincipal UserDetails userDetails) {
-//
-//    }
+    @GetMapping("/mybadges")
+    public List<Badge> getSitterBadges(@AuthenticationPrincipal UserDetails userDetails) {
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+        return user.getBadges();
+    }
 
 
 
