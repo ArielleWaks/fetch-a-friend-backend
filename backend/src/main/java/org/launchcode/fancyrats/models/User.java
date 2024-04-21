@@ -1,6 +1,8 @@
 package org.launchcode.fancyrats.models;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.*;
@@ -40,6 +42,9 @@ public class User {
 
 //    @OneToMany(mappedBy = "user")
 //    private List<Job> jobs = new ArrayList<>();
+
+    @ManyToMany
+    private final List<Job> bookmarkedJobs = new ArrayList<>();
 
     public User() {
     }
@@ -89,7 +94,14 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-//
+
+    public List<Job> getBookmarkedJobs() {
+        return bookmarkedJobs;
+    }
+
+    public void bookmarkJob(Job job){this.bookmarkedJobs.add(job);}
+
+    //
 //    public List<Job> getJobs() {
 //        return jobs;
 //    }
