@@ -9,7 +9,8 @@ import org.launchcode.fancyrats.models.data.JobRepository;
 import org.launchcode.fancyrats.models.data.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class BadgeService {
@@ -26,47 +27,49 @@ public class BadgeService {
         this.userRepository = userRepository;
     }
 
-    private Badge findJobNumberBadgeBySitterId(Long sitterId){
-        int completedSitterJobs = jobRepository.countCompletedJobBySitterId(sitterId);
-        if(completedSitterJobs == 0) {
-            return null;
-        }
-        if(completedSitterJobs < 5) {
-            return badgeRepository.findBadgeByBadgeTypeAndNumberOfJobs(BadgeType.JOB, 1);
-        }
-        if(completedSitterJobs < 10) {
-            return badgeRepository.findBadgeByBadgeTypeAndNumberOfJobs(BadgeType.JOB, 5);
-        }
-        if(completedSitterJobs <25) {
-            return badgeRepository.findBadgeByBadgeTypeAndNumberOfJobs(BadgeType.JOB, 10);
-        }
-        return badgeRepository.findBadgeByBadgeTypeAndNumberOfJobs(BadgeType.JOB, 25);
+    public List<Badge> findJobNumberBadgeBySitter(User sitter) {
+        int completedSitterJobs = jobRepository.countCompletedJobBySitter(sitter);
+        return badgeRepository.findBadgeByBadgeTypeAndNumberOfJobs(BadgeType.JOB, completedSitterJobs);
     }
 
-    public void assignJobNumberBadgeToSitter(User sitter){
-        List<Badge> currentBadges = sitter.getBadges();
-        if (currentBadges.contains(findJobNumberBadgeBySitterId(sitter.getId()))) {
-            return;
-        }
-        currentBadges.add(findJobNumberBadgeBySitterId(sitter.getId()));
+    public List<Badge> countCompletedJobBySitterAndPetType(User sitter) {
+        /*
+         *  TODO:
+         *   jobs.stream get pet types
+         *   Collect in to a set of pet types
+         *   loop through types instead of all pet types
+         */
+
+        return EnumSet.allOf(PetType.class).stream().map(petType -> {
+            int completedSitterJobs = jobRepository.countCompletedJobBySitterAndPetType(sitter, petType);
+            return badgeRepository.findBadgesByBadgeTypeAndNumberOfJobsAndPetType(BadgeType.SPECIALTY, completedSitterJobs, petType);
+        }).flatMap(Collection::stream).collect(Collectors.toList());
     }
 
-    public Badge findCompletedJobsBadge(String username) {
-        int completedSitterJobs = jobRepository.findCompletedJobsBySitterUsername(username).size();
-        if(completedSitterJobs == 0) {
-            return null;
-        }
-        if(completedSitterJobs < 5) {
-            return badgeRepository.findBadgeByBadgeTypeAndNumberOfJobs(BadgeType.JOB, 1);
-        }
-        if(completedSitterJobs < 10) {
-            return badgeRepository.getReferenceById(2);
-        }
-        if(completedSitterJobs <25) {
-            return badgeRepository.getReferenceById(3);
-        }
-        return badgeRepository.getReferenceById(4);
+    public void assignJobNumberBadgeToSitter(User sitter) {
+        Set<Badge> currentBadges = sitter.getBadges();
+//        if (currentBadges.contains(findJobNumberBadgeBySitterId(sitter.getId()))) {
+//            return;
+//        }
+        currentBadges.addAll(findJobNumberBadgeBySitter(sitter));
     }
+
+//    public List<Badge> findCompletedJobsBadge(String username) {
+//        int completedSitterJobs = jobRepository.findCompletedJobsBySitterUsername(username).size();
+//        if(completedSitterJobs == 0) {
+//            return null;
+//        }
+//        if(completedSitterJobs < 5) {
+//            return badgeRepository.findBadgeByBadgeTypeAndNumberOfJobs(BadgeType.JOB, 1);
+//        }
+//        if(completedSitterJobs < 10) {
+//            return badgeRepository.getReferenceById(2);
+//        }
+//        if(completedSitterJobs <25) {
+//            return badgeRepository.getReferenceById(3);
+//        }
+//        return badgeRepository.getReferenceById(4);
+//    }
 
     public Badge findDifferentSpeciesBadge(String username) {
         int petTypeCount = 0;

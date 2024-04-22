@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/badges")
@@ -38,7 +39,7 @@ public class BadgesController {
     }
 
     @GetMapping("/mybadges")
-    public List<Badge> getSitterBadges(@AuthenticationPrincipal UserDetails userDetails) {
+    public Set<Badge> getSitterBadges(@AuthenticationPrincipal UserDetails userDetails) {
         User user = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
         return user.getBadges();

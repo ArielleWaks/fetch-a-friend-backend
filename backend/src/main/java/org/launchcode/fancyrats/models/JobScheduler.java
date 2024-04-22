@@ -7,6 +7,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class JobScheduler {
@@ -32,9 +34,17 @@ public class JobScheduler {
     public void assignBadges() {
         jobRepository
                 .findSitterIdsByCompletedJobEndDate(LocalDate.now().minusDays(1))
-                .forEach(badgeService::assignJobNumberBadgeToSitter);
+                .forEach(sitter -> {
+                    //TODO: get list of recent jobs
+                    List<Badge> jobBadges = badgeService.findJobNumberBadgeBySitter(sitter);
+                    List<Badge> petBadges = badgeService.countCompletedJobBySitterAndPetType(sitter);
+//                    List<Badge> wildBadges = badgeService.findJobNumberBadgeBySitter(sitter);
+                    Set<Badge> sitterBadges = sitter.getBadges();
+                    sitterBadges.addAll(jobBadges);
+                    sitterBadges.addAll(petBadges);
+                });
     }
-
+    //TODO: make badge service method names make more sense like getAnimalBasedJobsBySitter
 
 
 

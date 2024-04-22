@@ -54,7 +54,6 @@ public class Job {
     @ManyToOne
     private User user;
 
-
     @ManyToOne
     private User sitter;
 

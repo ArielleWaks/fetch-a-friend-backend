@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.Filter;
 
 @Entity
 @Table(name = "users",
@@ -43,8 +44,11 @@ public class User {
 //    @OneToMany(mappedBy = "user")
 //    private List<Job> jobs = new ArrayList<>();
 
+    @OneToMany(mappedBy = "sitter")
+    private List<Job> sitterJobs = new ArrayList<>();
+
     @ManyToMany
-    private List<Badge> badges = new ArrayList<>();
+    private Set<Badge> badges = new HashSet<>();
 
     public User() {
     }
@@ -95,12 +99,20 @@ public class User {
         this.roles = roles;
     }
 
-    public List<Badge> getBadges() {
+    public Set<Badge> getBadges() {
         return badges;
     }
 
-    public void setBadges(List<Badge> badges) {
+    public void setBadges(Set<Badge> badges) {
         this.badges = badges;
+    }
+
+    public List<Job> getSitterJobs() {
+        return sitterJobs;
+    }
+
+    public void setSitterJobs(List<Job> sitterJobs) {
+        this.sitterJobs = sitterJobs;
     }
 
     //
