@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -47,6 +48,7 @@ public class User {
     private final List<Job> bookmarkedJobs = new ArrayList<>();
 
     @OneToMany(mappedBy = "sitter")
+    @JsonBackReference
     private List<Job> sitterJobs = new ArrayList<>();
 
     @ManyToMany
@@ -107,7 +109,6 @@ public class User {
 
     public void bookmarkJob(Job job){this.bookmarkedJobs.add(job);}
 
-    //
 
     public Set<Badge> getBadges() {
         return badges;

@@ -1,5 +1,7 @@
 package org.launchcode.fancyrats.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -54,6 +56,7 @@ public class Job {
     private User user;
 
     @ManyToOne
+    @JsonManagedReference
     private User sitter;
 
     private JobStatus jobStatus;
