@@ -9,7 +9,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.Filter;
 
 @Entity
 @Table(name = "users",
@@ -43,6 +42,9 @@ public class User {
 
 //    @OneToMany(mappedBy = "user")
 //    private List<Job> jobs = new ArrayList<>();
+
+    @ManyToMany
+    private final List<Job> bookmarkedJobs = new ArrayList<>();
 
     @OneToMany(mappedBy = "sitter")
     private List<Job> sitterJobs = new ArrayList<>();
@@ -98,6 +100,14 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
+    public List<Job> getBookmarkedJobs() {
+        return bookmarkedJobs;
+    }
+
+    public void bookmarkJob(Job job){this.bookmarkedJobs.add(job);}
+
+    //
 
     public Set<Badge> getBadges() {
         return badges;

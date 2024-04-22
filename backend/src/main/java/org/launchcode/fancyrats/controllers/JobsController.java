@@ -21,6 +21,7 @@ import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/jobs")
@@ -152,4 +153,32 @@ public class JobsController {
 
         return fieldErrors;
     }
+
+
+
+    @PutMapping("/bookmark/{id}")
+    public ResponseEntity<Job> bookmarkToggle(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Integer id
+    ) {
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+        Job currentJob = jobRepository.findById(id).orElseThrow(RuntimeException::new);
+
+        if (currentJob.getUsersWhoBookmarked().contains(user)) {
+            currentJob.removeUserWhoBookmarked(user);
+            currentJob = jobRepository.save(currentJob);
+            return ResponseEntity.ok(currentJob);
+        } else {
+            currentJob.addUserWhoBookmarked(user);
+            currentJob = jobRepository.save(currentJob);
+            return ResponseEntity.ok(currentJob);
+        }
+    }
+
+    @GetMapping("/myBookmarkedJobs")
+    public List<Job> getMyBookmarks(@AuthenticationPrincipal UserDetails userDetails) {
+        return jobRepository.findBookmarkedJobsByUsername(userDetails.getUsername());
+    }
+
 }
