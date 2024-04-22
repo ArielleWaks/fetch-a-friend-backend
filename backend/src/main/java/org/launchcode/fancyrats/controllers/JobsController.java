@@ -176,4 +176,9 @@ public class JobsController {
         }
     }
 
+    @GetMapping("/myBookmarkedJobs")
+    public List<Job> getMyBookmarks(@AuthenticationPrincipal UserDetails userDetails) {
+        return jobRepository.findBookmarkedJobsByUsername(userDetails.getUsername());
+    }
+
 }
