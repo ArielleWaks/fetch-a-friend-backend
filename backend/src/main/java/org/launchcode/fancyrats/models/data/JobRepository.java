@@ -26,10 +26,7 @@ public interface JobRepository extends JpaRepository<Job, Integer> {
     @Query("update Job j set j.jobStatus = 3 where j.jobStatus = 1 and j.endDate < :date")
     void completedClaimedJobs(@Param("date") LocalDate date);
 
-    @Query("select j from Job j where j.endDate = :date")
-    List<Job> findCompletedJobsByEndDate(@Param("date") LocalDate date);
-
-    @Query("select j.sitter from Job j where j.jobStatus = 3 and j.endDate >= :date")
+    @Query("select j.sitter from Job j where j.jobStatus = 3 and j.endDate <= :date")
     List<User> findSitterIdsByCompletedJobEndDate(@Param("date") LocalDate date);
 
     @Query("select j from Job j, User u where j.sitter = u and u.username = :sitterUsername")
@@ -40,11 +37,6 @@ public interface JobRepository extends JpaRepository<Job, Integer> {
 
     @Query("select count(*) from Job j where j.jobStatus = org.launchcode.fancyrats.models.JobStatus.STATUS_COMPLETED and j.sitter = :sitter and j.petType = :petType")
     Integer countCompletedJobBySitterAndPetType(@Param("sitter") User sitter, @Param("petType") PetType petType);
-
-//    @Query("select count (*) ")
-
-    @Query("select j from Job j, User u where j.sitter = u and j.jobStatus = 3 and u.username = :sitterUsername")
-    List<Job> findCompletedJobsBySitterUsername(@Param("sitterUsername") String sitterUsername);
 
     @Query("select j from Job j, User u where j.user = u and u.username = :userUsername")
     List<Job> findJobsByUserUsername(@Param("userUsername") String userUsername);

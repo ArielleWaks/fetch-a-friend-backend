@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -41,15 +40,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-//    @OneToMany(mappedBy = "user")
-//    private List<Job> jobs = new ArrayList<>();
-
     @ManyToMany
     private final List<Job> bookmarkedJobs = new ArrayList<>();
-
-    @OneToMany(mappedBy = "sitter")
-    @JsonBackReference
-    private List<Job> sitterJobs = new ArrayList<>();
 
     @ManyToMany
     private Set<Badge> badges = new HashSet<>();
@@ -118,20 +110,4 @@ public class User {
         this.badges = badges;
     }
 
-    public List<Job> getSitterJobs() {
-        return sitterJobs;
-    }
-
-    public void setSitterJobs(List<Job> sitterJobs) {
-        this.sitterJobs = sitterJobs;
-    }
-
-    //
-//    public List<Job> getJobs() {
-//        return jobs;
-//    }
-//
-//    public void setJobs(List<Job> jobs) {
-//        this.jobs = jobs;
-//    }
 }

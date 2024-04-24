@@ -1,14 +1,14 @@
 package org.launchcode.fancyrats.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Entity
 public class Job {
 
@@ -49,14 +49,10 @@ public class Job {
 
     private Integer petNumber;
 
-    @NotNull
-    private String chosenAnimalType;
-
     @ManyToOne
     private User user;
 
     @ManyToOne
-    @JsonManagedReference
     private User sitter;
 
     private JobStatus jobStatus;
@@ -69,7 +65,7 @@ public class Job {
     private List<User> usersWhoBookmarked = new ArrayList<>();
 
     public Job(Integer zipCode, LocalDate startDate, LocalDate endDate, LocalDate createdDate, double payRate,
-               double totalHours, String description, String petName, PetType petType, Integer petNumber, User user, User sitter, JobStatus jobStatus, String chosenAnimalType) {
+               double totalHours, String description, String petName, PetType petType, Integer petNumber, User user, User sitter, JobStatus jobStatus) {
         this.zipCode = zipCode;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -83,125 +79,60 @@ public class Job {
         this.user = user;
         this.sitter = sitter;
         this.jobStatus = jobStatus;
-        this.chosenAnimalType = chosenAnimalType;
     }
 
     public Job() {}
 
-    public Integer getId() {
-        return id;
-    }
-
-    public Integer getZipCode() {
-        return zipCode;
-    }
-
     public void setZipCode(Integer zipCode) {
         this.zipCode = zipCode;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
     }
 
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
-    }
-
-    public LocalDate getCreatedDate() {
-        return createdDate;
     }
 
     public void setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
     }
 
-    public double getPayRate() {
-        return payRate;
-    }
-
     public void setPayRate(double payRate) {
         this.payRate = payRate;
-    }
-
-    public double getTotalHours() {
-        return totalHours;
     }
 
     public void setTotalHours(double totalHours) {
         this.totalHours = totalHours;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getPetName() {
-        return petName;
     }
 
     public void setPetName(String petName) {
         this.petName = petName;
     }
 
-    public PetType getPetType() {
-        return petType;
-    }
-
     public void setPetType(PetType petType) {
         this.petType = petType;
-    }
-
-    public Integer getPetNumber() {
-        return petNumber;
     }
 
     public void setPetNumber(Integer petNumber) {
         this.petNumber = petNumber;
     }
 
-    public User getUser() {
-        return user;
-    }
-
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public User getSitter() {
-        return sitter;
     }
 
     public void setSitter(User sitter) {
         this.sitter = sitter;
     }
 
-    public JobStatus getJobStatus() {
-        return jobStatus;
-    }
-
     public void setJobStatus(JobStatus jobStatus) {
         this.jobStatus = jobStatus;
-    }
-
-    public String getChosenAnimalType(){return this.chosenAnimalType;}
-
-    public void setChosenAnimalType(String newChosenAnimal){this.chosenAnimalType = newChosenAnimal;}
-
-    public List<User> getUsersWhoBookmarked() {
-        return usersWhoBookmarked;
     }
 
     public void addUserWhoBookmarked(User user){ this.usersWhoBookmarked.add(user);}

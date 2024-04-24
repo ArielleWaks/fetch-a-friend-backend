@@ -21,7 +21,6 @@ import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/jobs")
@@ -106,7 +105,6 @@ public class JobsController {
             currentJob.setPetName(job.getPetName());
             currentJob.setPetType(job.getPetType());
             currentJob.setPetNumber(job.getPetNumber());
-            currentJob.setChosenAnimalType(job.getChosenAnimalType());
             currentJob = jobRepository.save(currentJob);
             return ResponseEntity.ok(currentJob);
         }

@@ -22,14 +22,14 @@ public class JobScheduler {
         this.badgeService = badgeService;
     }
 
-    @Scheduled(fixedDelay = 6000000) //6000000=60 minutes
+    @Scheduled(fixedDelay = 600000) //600000=6 minutes
     public void updateExpiredAndCompletedJobs() {
         jobRepository.closeExpiredJobs(LocalDate.now());
         jobRepository.completedClaimedJobs(LocalDate.now());
     }
 
 
-    @Scheduled(fixedDelay = 6000000)
+    @Scheduled(initialDelay = 30000, fixedDelay = 600000)
     @Transactional
     public void assignBadges() {
         jobRepository
@@ -38,7 +38,6 @@ public class JobScheduler {
                     //TODO: get list of recent jobs
                     List<Badge> jobBadges = badgeService.findJobNumberBadgeBySitter(sitter);
                     List<Badge> petBadges = badgeService.countCompletedJobBySitterAndPetType(sitter);
-//                    List<Badge> wildBadges = badgeService.findJobNumberBadgeBySitter(sitter);
                     Set<Badge> sitterBadges = sitter.getBadges();
                     sitterBadges.addAll(jobBadges);
                     sitterBadges.addAll(petBadges);

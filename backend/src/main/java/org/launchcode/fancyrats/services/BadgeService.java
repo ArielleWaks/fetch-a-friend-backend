@@ -19,12 +19,10 @@ public class BadgeService {
 
     private final BadgeRepository badgeRepository;
 
-    private final UserRepository userRepository;
 
-    public BadgeService(JobRepository jobRepository, BadgeRepository badgeRepository, UserRepository userRepository) {
+    public BadgeService(JobRepository jobRepository, BadgeRepository badgeRepository) {
         this.jobRepository = jobRepository;
         this.badgeRepository = badgeRepository;
-        this.userRepository = userRepository;
     }
 
     public List<Badge> findJobNumberBadgeBySitter(User sitter) {
@@ -44,71 +42,6 @@ public class BadgeService {
             int completedSitterJobs = jobRepository.countCompletedJobBySitterAndPetType(sitter, petType);
             return badgeRepository.findBadgesByBadgeTypeAndNumberOfJobsAndPetType(BadgeType.SPECIALTY, completedSitterJobs, petType);
         }).flatMap(Collection::stream).collect(Collectors.toList());
-    }
-
-    public void assignJobNumberBadgeToSitter(User sitter) {
-        Set<Badge> currentBadges = sitter.getBadges();
-//        if (currentBadges.contains(findJobNumberBadgeBySitterId(sitter.getId()))) {
-//            return;
-//        }
-        currentBadges.addAll(findJobNumberBadgeBySitter(sitter));
-    }
-
-//    public List<Badge> findCompletedJobsBadge(String username) {
-//        int completedSitterJobs = jobRepository.findCompletedJobsBySitterUsername(username).size();
-//        if(completedSitterJobs == 0) {
-//            return null;
-//        }
-//        if(completedSitterJobs < 5) {
-//            return badgeRepository.findBadgeByBadgeTypeAndNumberOfJobs(BadgeType.JOB, 1);
-//        }
-//        if(completedSitterJobs < 10) {
-//            return badgeRepository.getReferenceById(2);
-//        }
-//        if(completedSitterJobs <25) {
-//            return badgeRepository.getReferenceById(3);
-//        }
-//        return badgeRepository.getReferenceById(4);
-//    }
-
-    public Badge findDifferentSpeciesBadge(String username) {
-        int petTypeCount = 0;
-        for (int i=0; i< PetType.values().length; i++) {
-            if(!jobRepository.findJobsBySitterAndPetType(username, i).isEmpty()) {
-                petTypeCount +=1;
-            }
-        }
-        if (petTypeCount >= 5) {
-            return badgeRepository.getReferenceById(22);
-        }
-        if (petTypeCount >= 3) {
-            return badgeRepository.getReferenceById(21);
-        }
-        return null;
-    }
-
-    public Badge findCompletedAnamalBadge(String username, PetType petType) {
-        int completedDogJobs = jobRepository.findJobsBySitterAndPetType(username, petType.ordinal()).size();
-        if(completedDogJobs >=3) {
-            return badgeRepository.getReferenceById(31);
-        }
-        return null;
-    }
-
-    public Badge findCompletedDogBadge(String username) {
-        return findCompletedAnamalBadge(username, PetType.DOG);
-    }
-
-    public Badge findCompletedCatBadge(String username) {
-        return findCompletedAnamalBadge(username, PetType.CAT);
-    }
-
-    public Badge findCompletedFishBadge(String username) {
-        return findCompletedAnamalBadge(username, PetType.FISH);
-    }
-
-    public Badge findCompletedBirdBadge(String username) {
-        return findCompletedAnamalBadge(username, PetType.BIRD);
     }
 
 }
