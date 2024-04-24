@@ -35,7 +35,6 @@ public class JobScheduler {
         jobRepository
                 .findSitterIdsByCompletedJobEndDate(LocalDate.now().minusDays(1))
                 .forEach(sitter -> {
-                    //TODO: get list of recent jobs
                     List<Badge> jobBadges = badgeService.findJobNumberBadgeBySitter(sitter);
                     List<Badge> petBadges = badgeService.countCompletedJobBySitterAndPetType(sitter);
                     Set<Badge> sitterBadges = sitter.getBadges();
@@ -43,8 +42,6 @@ public class JobScheduler {
                     sitterBadges.addAll(petBadges);
                 });
     }
-    //TODO: make badge service method names make more sense like getAnimalBasedJobsBySitter
-
 
 
 }

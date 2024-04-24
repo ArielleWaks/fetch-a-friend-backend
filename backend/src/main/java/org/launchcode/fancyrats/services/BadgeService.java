@@ -31,12 +31,6 @@ public class BadgeService {
     }
 
     public List<Badge> countCompletedJobBySitterAndPetType(User sitter) {
-        /*
-         *  TODO:
-         *   jobs.stream get pet types
-         *   Collect in to a set of pet types
-         *   loop through types instead of all pet types
-         */
 
         return EnumSet.allOf(PetType.class).stream().map(petType -> {
             int completedSitterJobs = jobRepository.countCompletedJobBySitterAndPetType(sitter, petType);
