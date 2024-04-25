@@ -40,11 +40,11 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-//    @OneToMany(mappedBy = "user")
-//    private List<Job> jobs = new ArrayList<>();
-
     @ManyToMany
     private final List<Job> bookmarkedJobs = new ArrayList<>();
+
+    @ManyToMany
+    private Set<Badge> badges = new HashSet<>();
 
     public User() {
     }
@@ -101,12 +101,13 @@ public class User {
 
     public void bookmarkJob(Job job){this.bookmarkedJobs.add(job);}
 
-    //
-//    public List<Job> getJobs() {
-//        return jobs;
-//    }
-//
-//    public void setJobs(List<Job> jobs) {
-//        this.jobs = jobs;
-//    }
+
+    public Set<Badge> getBadges() {
+        return badges;
+    }
+
+    public void setBadges(Set<Badge> badges) {
+        this.badges = badges;
+    }
+
 }
