@@ -1,10 +1,10 @@
 //package org.launchcode.fancyrats.backend.models;
 //
 //import org.junit.jupiter.api.Test;
-//import org.launchcode.fancyrats.models.Job;
-//import org.launchcode.fancyrats.models.JobStatus;
-//import org.launchcode.fancyrats.models.User;
-//import org.launchcode.fancyrats.models.data.JobRepository;
+//import org.launch_code.fetch_a_friend.models.Job;
+//import org.launch_code.fetch_a_friend.models.JobStatus;
+//import org.launch_code.fetch_a_friend.models.User;
+//import org.launch_code.fetch_a_friend.models.data.JobRepository;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 //import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
