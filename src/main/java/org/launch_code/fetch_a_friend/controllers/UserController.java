@@ -14,17 +14,12 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/test")
-public class TestController {
+@RequestMapping("/api/user")
+public class UserController {
     private final JobRepository jobRepository;
 
-    public TestController(JobRepository jobRepository) {
+    public UserController(JobRepository jobRepository) {
         this.jobRepository = jobRepository;
-    }
-
-    @GetMapping("/all")
-    public String allAccess() {
-        return "Public Content.";
     }
 
     @GetMapping("/user")
