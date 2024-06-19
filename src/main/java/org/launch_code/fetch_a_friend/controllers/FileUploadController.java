@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,11 +31,13 @@ public class FileUploadController {
 
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
+    @PreAuthorize("hasRole('MODERATOR')")
     public List<FileDetails> getAllFiles() {
         return this.fileUploadService.getAllFiles();
     }
 
     @PostMapping(value = "/upload")
+    @PreAuthorize("hasRole('MODERATOR')")
     public ResponseEntity<Object> uploadFiles(@RequestParam("name") String name
             , @RequestParam("files") MultipartFile[] files, @RequestParam("description") String description) {
 
@@ -58,6 +61,7 @@ public class FileUploadController {
     }
 
     @GetMapping("/download/{fileName:.+}")
+    @PreAuthorize("hasRole('MODERATOR')")
     public ResponseEntity<Object> downloadFile(@PathVariable String fileName,
                                                HttpServletRequest request) {
 
