@@ -22,14 +22,14 @@ public class JobScheduler {
         this.badgeService = badgeService;
     }
 
-    @Scheduled(fixedDelay = 600000) //600000=6 minutes
+    @Scheduled(cron = "@midnight")
     public void updateExpiredAndCompletedJobs() {
         jobRepository.closeExpiredJobs(LocalDate.now());
         jobRepository.completedClaimedJobs(LocalDate.now());
     }
 
 
-    @Scheduled(initialDelay = 30000, fixedDelay = 600000)
+    @Scheduled(cron = "0 1 * * ?") // every day at 1 AM
     @Transactional
     public void assignBadges() {
         jobRepository
