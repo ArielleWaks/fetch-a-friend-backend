@@ -18,7 +18,12 @@ RUN gradle clean build -x test
 
 FROM amazonlinux:latest
 
-RUN yum install java-17-amazon-corretto-headless -y
+RUN yum install java-17-amazon-corretto-headless -y \
+    shadow-utils
+
+RUN useradd spring
+
+USER spring
 
 WORKDIR /app
 
