@@ -30,4 +30,6 @@ WORKDIR /app
 
 COPY --from=build app/build/libs/fetch-a-friend-backend-0.0.1-SNAPSHOT.jar fetch-a-friend-backend-0.0.1-SNAPSHOT.jar
 
-CMD java -jar fetch-a-friend-backend-0.0.1-SNAPSHOT.jar
+CMD java -jar \
+ -Dspring.profiles.active=prod \
+  fetch-a-friend-backend-0.0.1-SNAPSHOT.jar
