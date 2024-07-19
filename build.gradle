@@ -58,8 +58,7 @@ asciidoctor {
 }
 
 bootJar {
-    dependsOn asciidoctor
-    from ("${asciidoctor.outputDir}/html5") {
-        into 'static/docs'
+    manifest {
+        attributes 'Start-Class': 'org.launch_code.fetch_a_friend.BackendApplication'
     }
 }
