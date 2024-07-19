@@ -11,11 +11,11 @@ import java.util.List;
 
 public interface FileUploadService {
 
-    public FileUploadResponse uploadFile(MultipartFile file,
-                                         String uploaderName, String description) throws IOException;
-
-    public Resource fetchFileAsResource(String fileName) throws FileNotFoundException;
-
-    public List<FileDetails> getAllFiles();
+//    public FileUploadResponse uploadFile(MultipartFile file,
+//                                         String uploaderName, String description) throws IOException;
+//
+//    public Resource fetchFileAsResource(String fileName) throws FileNotFoundException;
+//
+//    public List<FileDetails> getAllFiles();
 }
 
